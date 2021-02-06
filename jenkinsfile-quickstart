@@ -1,0 +1,36 @@
+node{
+    def mavenHome = tool name: "Maven-3.6.1"
+//===============SCM CHECKOUT===============
+     stage('SCM Checkout'){
+         git credentialsId: 'git_credentials', url: 'https://github.com/chiranjeevidp/codebuild.git',branch: 'master'
+     }
+     
+     stage('Build')
+     {
+     sh "${mavenHome}/bin/mvn clean package"  
+     }
+     
+     stage('DeployAppintotomcatServer')
+     {
+        /*//sshagent(['a55de6d9-3f30-49cf-8158-045c34a2de4b']) {
+         sshagent(['tomcat_credentials2']) {
+         sh "scp -o StrictHostKeyChecking=no target/*.war ubuntu@52.32.229.10:/opt/apache-tomcat-9.0.41/webapps"
+         } */
+
+
+	 sshagent(['wildfly_cred']) {
+    // some block
+sh "scp -o StrictHostKeyChecking=no target/iwayq.war ubuntu@34.212.26.226:/opt/wildfly/standalone/deployments"
+
+         }
+         
+    }
+    
+    /*stage('SendEmailNotification')
+    {
+        mail bcc: '', body: '''deployment is over!
+
+Regards,
+chiranjeevi''', cc: 'chiranjeevidp27@gmail.com', from: '', replyTo: '', subject: 'code release', to: 'chiranjeevidp27@gmail.com'
+    }*/
+}
