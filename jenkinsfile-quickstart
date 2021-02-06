@@ -1,10 +1,10 @@
 node{
     def mavenHome = tool name: "Maven-3.6.1"
 //===============SCM CHECKOUT===============
-     stage('SCM Checkout'){
+    /* stage('SCM Checkout'){
          git credentialsId: 'git_credentials', url: 'https://github.com/chiranjeevidp/codebuild.git',branch: 'master'
      }
-     
+     */
      stage('Build')
      {
      sh "${mavenHome}/bin/mvn clean package"  
